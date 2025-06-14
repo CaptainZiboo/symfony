@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product is defined ? 'Modifier' : 'Ajouter' }} un produit{% endblock %}
+
+{% block body %}
+    <h1>{{ product is defined ? 'Modifier' : 'Ajouter' }} un produit</h1>
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-primary">{{ product is defined ? 'Enregistrer' : 'Créer' }}</button>
+    {{ form_end(form) }}
+    <a href="{{ path('app_admin') }}">Retour à la liste</a>
+{% endblock %}

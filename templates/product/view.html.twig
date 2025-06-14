@@ -1,0 +1,31 @@
+{# filepath: templates/product/view.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block body %}
+    <h1>{{ product.name }}</h1>
+    <p>Prix : {{ product.price }} points</p>
+    <p>Catégorie : {{ product.category }}</p>
+
+    {% if app.user %}
+        {% if not app.user.actif %}
+            <div class="alert alert-danger">
+                Votre compte est désactivé, vous ne pouvez pas acheter de produits.
+            </div>
+        {% else %}
+            {% set manque = product.price - app.user.points %}
+            {% if app.user.points >= product.price %}
+                <form action="{{ path('app_product_buy', {id: product.id}) }}" method="post">
+                    <button type="submit" class="btn btn-success">Acheter</button>
+                </form>
+            {% else %}
+                <div class="alert alert-warning">
+                    Il vous manque {{ manque }} point{{ manque > 1 ? 's' : '' }} pour acheter ce produit.
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+    <a href="{{ path('app_product') }}">Retour à la liste</a>
+{% endblock %}

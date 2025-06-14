@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product List{% endblock %}
+
+{% block body %}
+    <h1>Product List</h1>
+
+    {% if app.user %}
+        <div class="alert alert-info" style="margin-bottom: 1rem;">
+            Vous avez <strong>{{ app.user.points }}</strong> points.
+        </div>
+    {% endif %}
+
+    {% if products is empty %}
+        <p>No products available.</p>
+    {% else %}
+        <ul>
+            {% for product in products %}
+                <li>
+                    <strong>{{ product.name }}</strong> - {{ product.price }} points
+                    <br>
+                    Category: {{ product.category }}
+                    <br>
+                    <a href="{{ path('app_product_view', {id: product.id}) }}">Voir le détail</a>
+                    {% if app.user %}
+                        {% set manque = product.price - app.user.points %}
+                        {% if app.user.points >= product.price %}
+                            <form action="{{ path('app_product_buy', {id: product.id}) }}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-success btn-sm">Acheter</button>
+                            </form>
+                        {% else %}
+                            <span class="text-warning">
+                                Il vous manque {{ manque }} point{{ manque > 1 ? 's' : '' }}.
+                            </span>
+                        {% endif %}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

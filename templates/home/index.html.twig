@@ -1,0 +1,47 @@
+{# filepath: d:\Development\projects\symfony\templates\home\index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+    <div style="margin-top: 2rem;">
+        {% if app.user %}
+            <p>
+                Welcome, {{ app.user.firstName }} {{ app.user.lastName }} ({{ app.user.email }})<br>
+                <strong>Status:</strong> Connected
+            </p>
+
+            <p>Pages utilisateur</p>
+            <ul>
+                <li>
+                    <a href="{{ path('app_product') }}" class="btn btn-primary">Voir les produits</a>
+                </li>
+                <li>
+                    <a href="{{ path('app_profile') }}" class="btn btn-secondary">Modifier mon profil</a>
+                </li>
+            </ul>    
+
+            {% if is_granted('ROLE_ADMIN') %}
+                <p>Pages administrateur</p>
+                <ul>
+                    <li>
+                        <a href="{{ path('admin_users') }}" class="btn btn-info">Gestion des utilisateurs</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('admin_products') }}" class="btn btn-info">Gestion des produits</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('admin_notifications') }}" class="btn btn-info">Notifications</a>
+                    </li>
+                </ul>
+            {% endif %}
+
+            <form action="{{ path('app_logout') }}" method="post">
+                <button type="submit">Logout</button>
+            </form>
+        {% else %}
+            <a href="{{ path('app_login') }}">Login</a>
+            <a href="{{ path('app_register') }}">Register</a>
+        {% endif %}
+    </div>
+{% endblock %}

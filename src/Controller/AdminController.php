@@ -24,16 +24,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class AdminController extends AbstractController
 {
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/admin', name: 'app_admin')]
-    public function index(ProductRepository $productRepository, UserRepository $userRepository): Response
-    {
-        return $this->render('admin/index.html.twig', [
-            'products' => $productRepository->findAll(),
-            'users' => $userRepository->findAll(),
-        ]);
-    }
-
-    #[IsGranted('ROLE_ADMIN')]
     #[Route('/admin/product/new', name: 'admin_product_new')]
     public function newProduct(Request $request, EntityManagerInterface $em): Response
     {
@@ -63,7 +53,7 @@ final class AdminController extends AbstractController
             $em->flush();
 
             $this->addFlash('success', 'Produit ajouté.');
-            return $this->redirectToRoute('app_admin');
+            return $this->redirectToRoute('admin_products');
         }
 
         return $this->render('admin/product_form.html.twig', [
@@ -101,7 +91,7 @@ final class AdminController extends AbstractController
             $em->flush();
 
             $this->addFlash('success', 'Produit modifié.');
-            return $this->redirectToRoute('app_admin');
+            return $this->redirectToRoute('admin_products');
         }
 
         return $this->render('admin/product_form.html.twig', [
@@ -142,7 +132,7 @@ final class AdminController extends AbstractController
         $em->flush();
 
         $this->addFlash('success', 'Produit supprimé.');
-        return $this->redirectToRoute('app_admin');
+        return $this->redirectToRoute('admin_products');
     }
 
 
@@ -152,6 +142,16 @@ final class AdminController extends AbstractController
     {
         $products = $productRepository->findAll();
         return $this->render('admin/products.html.twig', [
+            'products' => $products,
+        ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/admin/products/owned', name: 'admin_products_owned')]
+    public function ownedProducts(ProductRepository $productRepository): Response
+    {
+        $products = $productRepository->findBy(['createdBy' => $this->getUser()]);
+        return $this->render('admin/products_owned.html.twig', [
             'products' => $products,
         ]);
     }
@@ -184,7 +184,7 @@ final class AdminController extends AbstractController
         $bus->dispatch(new AddPointsToActiveUsers());
 
         $this->addFlash('success', 'La demande d\'ajout de points a été envoyée (traitée en tâche de fond).');
-        return $this->redirectToRoute('app_admin');
+        return $this->redirectToRoute('admin_users');
     }
 
     #[IsGranted('ROLE_ADMIN')]

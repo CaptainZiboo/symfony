@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gestion des produits{% endblock %}
+{% block title %}Mes produits{% endblock %}
 
 {% block body %}
-    <h1>Gestion des produits</h1>
+    <h1>Mes produits</h1>
     <a href="{{ path('admin_product_new') }}" class="btn btn-success mb-3">Ajouter un produit</a>
-    <a href="{{ path('admin_products_owned') }}" class="btn btn-info mb-3">Voir mes produits</a>
+    <a href="{{ path('admin_products') }}" class="btn btn-secondary mb-3">Voir tous les produits</a>
     <table class="table">
         <thead>
             <tr>

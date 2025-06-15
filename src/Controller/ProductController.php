@@ -58,20 +58,32 @@ final class ProductController extends AbstractController
         $notification = new Notification();
         $notification->setLabel(sprintf(
             'L\'utilisateur %s %s (%s) a acheté le produit "%s" le %s à %s.',
-            $product->getName(),
             $user->getFirstName(),
             $user->getLastName(),
             $user->getEmail(),
+            $product->getName(),
             (new \DateTime())->format('d/m/Y'),
             (new \DateTime())->format('H:i')
         ));
-        $notification->setUser($user); // ou setUser(null) si tu veux indiquer que c'est pour tous les admins
+        $notification->setUser($user);
         $notification->setCreatedAt(new \DateTimeImmutable());
         $em->persist($notification);
 
         $em->flush();
 
-        $this->addFlash('success', 'Achat effectué avec succès !');
+        $this->addFlash(
+            'success',
+            sprintf(
+                'Achat effectué avec succès ! Il vous reste %d points.',
+                $user->getPoints()
+            )
+        );
+
+        // Redirection dynamique selon la page d'origine
+        $referer = $request->headers->get('referer');
+        if ($referer) {
+            return $this->redirect($referer);
+        }
         return $this->redirectToRoute('app_product_view', ['id' => $product->getId()]);
     }
 }

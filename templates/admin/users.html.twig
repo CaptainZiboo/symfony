@@ -4,12 +4,20 @@
 
 {% block body %}
     <h1>Gestion des utilisateurs</h1>
+
+    <form action="{{ path('admin_users_add_points') }}" method="post" style="margin-bottom: 1rem;">
+        <button type="submit" class="btn btn-primary">
+            Ajouter 1000 points à tous les utilisateurs actifs
+        </button>
+    </form>
+
     <table class="table">
         <thead>
             <tr>
                 <th>Email</th>
                 <th>Nom</th>
                 <th>Prénom</th>
+                <th>Points</th>
                 <th>Statut</th>
                 <th>Action</th>
             </tr>
@@ -20,6 +28,7 @@
                 <td>{{ user.email }}</td>
                 <td>{{ user.lastName }}</td>
                 <td>{{ user.firstName }}</td>
+                <td>{{ user.points }}</td>
                 <td>
                     {% if user.active %}
                         <span class="badge bg-success">Actif</span>

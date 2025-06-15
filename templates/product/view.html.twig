@@ -9,7 +9,7 @@
     <p>Catégorie : {{ product.category }}</p>
 
     {% if app.user %}
-        {% if not app.user.actif %}
+        {% if not app.user.active %}
             <div class="alert alert-danger">
                 Votre compte est désactivé, vous ne pouvez pas acheter de produits.
             </div>

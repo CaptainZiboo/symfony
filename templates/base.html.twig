@@ -16,7 +16,32 @@
                 Votre compte est désactivé. Certaines fonctionnalités sont inaccessibles.
             </div>
         {% endif %}
+
         <a href="/" class="btn btn-secondary" style="margin: 1rem 0; display: inline-block;">Retour au menu</a>
+
+       {% set last_flash = null %}
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    {% set last_flash = {'label': label, 'message': message} %}
+                {% endfor %}
+            {% endfor %}
+
+            {% if last_flash %}
+                <div id="toast-flash"
+                    class="alert alert-{{ last_flash.label == 'success' ? 'success' : (last_flash.label == 'error' ? 'danger' : 'info') }}"
+                    style="position: fixed; top: 20px; right: 20px; min-width: 200px; z-index: 9999;">
+                    {{ last_flash.message }}
+                </div>
+                <script>
+                    setTimeout(function() {
+                        var toast = document.getElementById('toast-flash');
+                        if (toast) {
+                            toast.style.display = 'none';
+                        }
+                    }, 3000); // 3 secondes
+                </script>
+            {% endif %}
+
         {% block body %}{% endblock %}
     </body>
 </html>

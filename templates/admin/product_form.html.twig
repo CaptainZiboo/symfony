@@ -8,5 +8,5 @@
         {{ form_widget(form) }}
         <button class="btn btn-primary">{{ product is defined ? 'Enregistrer' : 'Créer' }}</button>
     {{ form_end(form) }}
-    <a href="{{ path('app_admin') }}">Retour à la liste</a>
+    <a href="{{ path('admin_products') }}">Retour à la liste</a>
 {% endblock %}
